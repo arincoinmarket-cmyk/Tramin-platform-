@@ -1,26 +1,52 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
 export default function AdminDepositsPage() {
   const [deposits, setDeposits] = useState([])
   const [loading, setLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
   const [msg, setMsg] = useState('')
-
-  const fetchDeposits = async () => {
-    setLoading(true)
-    const { data } = await supabase
-      .from('transactions')
-      .select('*, profiles(email, phone, secret_id)')
-      .eq('type', 'DEPOSIT')
-      .order('created_at', { ascending: false })
-
-    if (data) setDeposits(data)
-    setLoading(false)
-  }
+  const router = useRouter()
 
   useEffect(() => {
-    fetchDeposits()
+    async function checkAdminAndFetch() {
+      // 1. Check current logged-in user
+      const { data: { user } } = await supabase.auth.getUser()
+
+      if (!user) {
+        router.push('/login')
+        return
+      }
+
+      // 2. Check admin flag in profiles
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single()
+
+      if (!profile?.is_admin) {
+        setMsg('Access Denied: Admin privileges required.')
+        setLoading(false)
+        return
+      }
+
+      setIsAdmin(true)
+
+      // 3. Fetch deposit requests
+      const { data } = await supabase
+        .from('transactions')
+        .select('*, profiles(email, phone, secret_id)')
+        .eq('type', 'DEPOSIT')
+        .order('created_at', { ascending: false })
+
+      if (data) setDeposits(data)
+      setLoading(false)
+    }
+
+    checkAdminAndFetch()
   }, [])
 
   const handleAction = async (transaction_id, action) => {
@@ -35,22 +61,30 @@ export default function AdminDepositsPage() {
       if (data.error) setMsg(`Error: ${data.error}`)
       else {
         setMsg(data.message)
-        fetchDeposits()
+        // Refresh list
+        const { data: refreshed } = await supabase
+          .from('transactions')
+          .select('*, profiles(email, phone, secret_id)')
+          .eq('type', 'DEPOSIT')
+          .order('created_at', { ascending: false })
+        if (refreshed) setDeposits(refreshed)
       }
     } catch (err) {
       setMsg('Failed to update transaction.')
     }
   }
 
+  if (loading) return <main className="min-h-screen bg-black text-white p-6 text-center text-sm">Verifying Admin Session...</main>
+
+  if (!isAdmin) return <main className="min-h-screen bg-black text-red-500 p-6 text-center text-sm">{msg || 'Unauthorized'}</main>
+
   return (
     <main className="min-h-screen bg-black text-white p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-green-500 mb-6 text-center">Admin: Deposit Approvals</h1>
+      <h1 className="text-2xl font-bold text-yellow-500 mb-6 text-center">Admin: Deposit Approvals</h1>
 
       {msg && <p className="mb-4 text-xs text-center text-gray-300 bg-gray-800 p-2 rounded-lg">{msg}</p>}
 
-      {loading ? (
-        <p className="text-center text-gray-400 text-sm">Loading transactions...</p>
-      ) : deposits.length === 0 ? (
+      {deposits.length === 0 ? (
         <p className="text-center text-gray-500 text-sm">No deposit requests found.</p>
       ) : (
         <div className="space-y-3">
