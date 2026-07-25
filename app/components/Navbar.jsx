@@ -6,7 +6,7 @@ export default function Navbar() {
       <Link href="/" className="text-green-500 text-lg font-extrabold tracking-wider">
         TRAMIN
       </Link>
-      <div className="flex gap-4">
+      <div className="flex gap-3 text-xs">
         <Link href="/" className="hover:text-green-400 text-gray-300">
           Market
         </Link>
@@ -19,7 +19,13 @@ export default function Navbar() {
         <Link href="/p2p" className="hover:text-purple-400 text-gray-300">
           P2P
         </Link>
-        <Link href="/admin/deposits" className="hover:text-yellow-400 text-gray-300">
+        <Link href="/profile" className="hover:text-gray-100 text-gray-300">
+          Profile
+        </Link>
+        <Link href="/support" className="hover:text-blue-300 text-gray-300">
+          Support
+        </Link>
+        <Link href="/admin/deposits" className="hover:text-yellow-400 text-yellow-500 font-extrabold">
           Admin
         </Link>
       </div>
