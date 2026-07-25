@@ -13,6 +13,12 @@ export default function Navbar() {
         <Link href="/wallet" className="hover:text-green-400 text-gray-300">
           Wallets
         </Link>
+        <Link href="/mining" className="hover:text-blue-400 text-gray-300">
+          Mining
+        </Link>
+        <Link href="/admin/deposits" className="hover:text-yellow-400 text-gray-300">
+          Admin
+        </Link>
       </div>
     </nav>
   )
