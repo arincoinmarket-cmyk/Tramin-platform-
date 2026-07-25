@@ -16,6 +16,9 @@ export default function Navbar() {
         <Link href="/mining" className="hover:text-blue-400 text-gray-300">
           Mining
         </Link>
+        <Link href="/p2p" className="hover:text-purple-400 text-gray-300">
+          P2P
+        </Link>
         <Link href="/admin/deposits" className="hover:text-yellow-400 text-gray-300">
           Admin
         </Link>
