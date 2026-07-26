@@ -2,36 +2,39 @@ import Link from 'next/link'
 
 export default function Navbar() {
   return (
-    <nav className="bg-gray-900 border-b border-gray-800 px-6 py-3 flex justify-between items-center text-sm font-bold">
-      <Link href="/" className="text-green-500 text-lg font-extrabold tracking-wider">
-        TRAMIN
-      </Link>
-      <div className="flex gap-3 text-xs items-center">
-        <Link href="/" className="hover:text-green-400 text-gray-300">
-          Market
+    <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-2">
+        <Link href="/" className="text-green-500 text-lg font-black tracking-wider">
+          TRAMIN
         </Link>
-        <Link href="/wallet" className="hover:text-green-400 text-gray-300">
-          Wallets
-        </Link>
-        <Link href="/mining" className="hover:text-blue-400 text-gray-300">
-          Mining
-        </Link>
-        <Link href="/p2p" className="hover:text-purple-400 text-gray-300">
-          P2P
-        </Link>
-        <Link href="/profile" className="hover:text-gray-100 text-gray-300">
-          Profile
-        </Link>
-        <Link href="/support" className="hover:text-blue-300 text-gray-300">
-          Support
-        </Link>
-        <Link href="/admin/deposits" className="hover:text-yellow-400 text-yellow-500 font-extrabold">
-          Admin
-        </Link>
-        <Link href="/login" className="bg-yellow-500 text-black px-3 py-1 rounded-lg font-extrabold hover:bg-yellow-400 transition">
-          Sign In
-        </Link>
+        
+        <div className="flex items-center gap-3 overflow-x-auto text-xs font-semibold py-1 scrollbar-none">
+          <Link href="/" className="text-gray-300 hover:text-green-400 whitespace-nowrap">
+            Market
+          </Link>
+          <Link href="/wallet" className="text-gray-300 hover:text-green-400 whitespace-nowrap">
+            Wallets
+          </Link>
+          <Link href="/mining" className="text-gray-300 hover:text-blue-400 whitespace-nowrap">
+            Mining
+          </Link>
+          <Link href="/p2p" className="text-gray-300 hover:text-purple-400 whitespace-nowrap">
+            P2P
+          </Link>
+          <Link href="/profile" className="text-gray-300 hover:text-white whitespace-nowrap">
+            Profile
+          </Link>
+          <Link href="/support" className="text-gray-300 hover:text-blue-300 whitespace-nowrap">
+            Support
+          </Link>
+          <Link href="/admin/deposits" className="text-yellow-500 font-extrabold hover:text-yellow-400 whitespace-nowrap">
+            Admin
+          </Link>
+          <Link href="/login" className="bg-yellow-500 text-black px-2.5 py-1 rounded-md font-black hover:bg-yellow-400 whitespace-nowrap">
+            Sign In
+          </Link>
+        </div>
       </div>
-    </nav>
+    </header>
   )
 }
