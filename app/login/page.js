@@ -2,9 +2,10 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('arincoinmarket@gmail.com')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [msg, setMsg] = useState('')
@@ -26,7 +27,6 @@ export default function LoginPage() {
       return
     }
 
-    // Check if user is admin
     const { data: profile } = await supabase
       .from('profiles')
       .select('is_admin')
@@ -37,13 +37,13 @@ export default function LoginPage() {
       setMsg('Admin Login Successful! Redirecting...')
       router.push('/admin/deposits')
     } else {
-      setMsg('User Login Successful! Redirecting...')
+      setMsg('Login Successful! Redirecting...')
       router.push('/')
     }
   }
 
   return (
-    <main className="min-h-screen bg-black text-white p-6 max-w-md mx-auto flex flex-col justify-center">
+    <main className="min-h-screen bg-black text-white p-4 max-w-md mx-auto flex flex-col justify-center">
       <form onSubmit={handleLogin} className="bg-gray-900 border border-yellow-500/30 p-6 rounded-2xl shadow-xl">
         <h1 className="text-2xl font-bold text-yellow-500 mb-1 text-center">Tramin Sign In</h1>
         <p className="text-xs text-gray-400 mb-6 text-center">Enter your email and password</p>
@@ -51,7 +51,7 @@ export default function LoginPage() {
         <label className="block text-xs text-gray-400 mb-1">Email Address</label>
         <input
           type="email"
-          placeholder="admin@tramin.com"
+          placeholder="arincoinmarket@gmail.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -75,6 +75,13 @@ export default function LoginPage() {
         >
           {loading ? 'Logging in...' : 'SIGN IN'}
         </button>
+
+        <p className="text-xs text-center text-gray-400 mt-4">
+          Don't have an account?{' '}
+          <Link href="/signup" className="text-green-500 hover:underline font-bold">
+            Sign Up
+          </Link>
+        </p>
 
         {msg && <p className="mt-4 text-xs text-center text-gray-300 bg-gray-800 p-2 rounded-lg">{msg}</p>}
       </form>
